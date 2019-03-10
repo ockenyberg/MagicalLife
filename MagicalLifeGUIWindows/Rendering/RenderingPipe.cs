@@ -1,9 +1,8 @@
-﻿using MagicalLifeAPI.World;
+﻿using MagicalLifeAPI.Components.Generic.Renderable;
 using MagicalLifeAPI.World.Data;
 using MagicalLifeGUIWindows.GUI.MainMenu;
 using MagicalLifeGUIWindows.GUI.Reusable;
 using MagicalLifeGUIWindows.Input;
-using MagicalLifeGUIWindows.Rendering.GUI;
 using MagicalLifeGUIWindows.Rendering.Map;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,99 +18,62 @@ namespace MagicalLifeGUIWindows.Rendering
     public static class RenderingPipe
     {
         /// <summary>
-        /// The standard size of the tiles.
-        /// </summary>
-        public static readonly Point tileSize = Tile.GetTileSize().ToXNA();
-
-        public static readonly Rectangle FullScreenWindow = new Rectangle(new Point(0, 0), new Point(MagicalLifeSettings.Storage.MainWindow.Default.ScreenSize.Width, MagicalLifeSettings.Storage.MainWindow.Default.ScreenSize.Height));
-
-        /// <summary>
-        /// The standard color mask to apply to all tiles.
-        /// </summary>
-        public static readonly Color colorMask = Color.White;
-
-        /// <summary>
-        /// The x offset of the view due to the player moving the camera around the map.
-        /// </summary>
-        public static int XViewOffset = 0;
-
-        /// <summary>
-        /// The y offset of the view due to the player moving the camera around the map.
-        /// </summary>
-        public static int YViewOffset = 0;
-
-        /// <summary>
-        /// The currently viewed dimension.
-        /// </summary>
-        public static int Dimension = 0;
-
-        /// <summary>
         /// Draws the screen.
         /// </summary>
         /// <param name="spBatch"></param>
-        public static void DrawScreen(ref SpriteBatch spBatch)
+        public static void DrawScreen(SpriteBatch spBatch)
         {
             if (World.Dimensions.Count > 0)
             {
-                MapRenderer.DrawMap(ref spBatch, RenderingPipe.Dimension);
+                MapRenderer.DrawMap(spBatch, RenderInfo.Dimension);
             }
-
-            DrawGUI(ref spBatch);
-
-            //DrawMouseLocation(ref spBatch);
         }
 
-        public static void DrawMouseLocation(ref SpriteBatch spBatch)
+        public static void DrawMouseLocation(SpriteBatch spBatch)
         {
             int x = Mouse.GetState().X;
             int y = Mouse.GetState().Y;
             string mouseLocation = "{ " + x + ", " + y + " }";
-            DrawString(MainMenuLayout.MainMenuFont, mouseLocation, new Rectangle(500, 500, 200, 50), Alignment.Center, Color.AliceBlue, ref spBatch);
+            DrawString(MainMenuLayout.MainMenuFont, mouseLocation, new Rectangle(500, 500, 200, 50), Alignment.Center, Color.AliceBlue, spBatch, RenderLayer.GUI);
         }
 
         /// <summary>
         /// Draws the GUI onto the screen.
         /// </summary>
         /// <param name="spBatch"></param>
-        private static void DrawGUI(ref SpriteBatch spBatch)
+        public static void DrawGUI(SpriteBatch spBatch)
         {
-            DrawContainers(ref spBatch);
+            DrawContainers(spBatch);
         }
 
-        private static void DrawContainers(ref SpriteBatch spBatch)
+        private static void DrawContainers(SpriteBatch spBatch)
         {
             foreach (GUIContainer item in Enumerable.Reverse(BoundHandler.GUIWindows))
             {
                 if (item.Visible)
                 {
-                    spBatch.Draw(item.Image, item.DrawingBounds, colorMask);
+                    RenderYoungestChild(item, spBatch);
+                }
+            }
+        }
 
-                    foreach (GUIElement control in item.Controls)
+        private static void RenderYoungestChild(GUIContainer item, SpriteBatch spBatch)
+        {
+            if (item.Child == null)
+            {
+                spBatch.Draw(item.Image, item.DrawingBounds, Color.White);
+
+                foreach (GUIElement control in item.Controls)
+                {
+                    if (control.Visible)
                     {
-                        if (control.Visible)
-                        {
-                            switch (control)
-                            {
-                                case MonoButton button:
-                                    GUIRenderer.DrawButtonInContainer((MonoButton)control, ref spBatch, item);
-                                    break;
-
-                                case MonoInputBox textBox:
-                                    GUIRenderer.DrawInputBoxInContainer((MonoInputBox)control, ref spBatch, item);
-                                    break;
-
-                                case MonoLabel label:
-                                    GUIRenderer.DrawLabelInContainer((MonoLabel)control, ref spBatch, item);
-                                    break;
-
-                                default:
-                                    //Should probably send out a event or something, to allow someone else to render it.
-                                    //TODO:
-                                    break;
-                            }
-                        }
+                        control.Render(spBatch, item.DrawingBounds);
                     }
                 }
+            }
+            else
+            {
+                RenderYoungestChild(item.Child, spBatch);
             }
         }
     }

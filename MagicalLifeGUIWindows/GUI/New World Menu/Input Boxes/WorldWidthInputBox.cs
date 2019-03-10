@@ -1,24 +1,23 @@
-﻿using MagicalLifeGUIWindows.GUI.Reusable;
+﻿using MagicalLifeAPI.Asset;
+using MagicalLifeGUIWindows.GUI.Reusable;
 using Microsoft.Xna.Framework;
 
-namespace MagicalLifeGUIWindows.GUI.New_World_Menu
+namespace MagicalLifeGUIWindows.GUI.New
 {
     /// <summary>
     /// Allows the user to input how wide they want the world to be.
     /// </summary>
     public class WorldWidthInputBox : MonoInputBox
     {
-        public WorldWidthInputBox(bool isLocked) : base("InputBox100x50", "CursorCarrot", GetInitialLocation(), int.MaxValue, "MainMenuFont12x", isLocked, Rendering.Text.SimpleTextRenderer.Alignment.Left, true)
+        public WorldWidthInputBox(bool isLocked)
+            : base(TextureLoader.GUIInputBox100x50, TextureLoader.GUICursorCarrot, GetInitialLocation(),
+                  int.MaxValue, TextureLoader.FontMainMenuFont12x, isLocked,
+                  Rendering.Text.SimpleTextRenderer.Alignment.Left, true)
         {
         }
 
         public WorldWidthInputBox() : base()
         {
-        }
-
-        public string GetTextureName()
-        {
-            return "CursorCarrot";
         }
 
         /// <summary>

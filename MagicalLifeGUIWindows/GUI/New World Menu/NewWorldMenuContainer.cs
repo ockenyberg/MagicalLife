@@ -1,10 +1,8 @@
-﻿using MagicalLifeGUIWindows.GUI.New_World_Menu.Buttons;
-using MagicalLifeGUIWindows.GUI.New_World_Menu.Input_Boxes;
-using MagicalLifeGUIWindows.GUI.New_World_Menu.Labels;
+﻿using MagicalLifeAPI.Asset;
+using MagicalLifeAPI.Components.Generic.Renderable;
 using MagicalLifeGUIWindows.GUI.Reusable;
-using MagicalLifeGUIWindows.Rendering;
 
-namespace MagicalLifeGUIWindows.GUI.New_World_Menu
+namespace MagicalLifeGUIWindows.GUI.New
 {
     /// <summary>
     /// The menu that pops up when the user creates a new world.
@@ -17,7 +15,7 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         public LengthLabel lengthLabel = new LengthLabel();
         public WidthLabel widthLabel = new WidthLabel();
 
-        public NewWorldMenuContainer(bool visible) : base("MenuBackground", RenderingPipe.FullScreenWindow)
+        public NewWorldMenuContainer(bool visible) : base(TextureLoader.GUIMenuBackground, RenderInfo.FullScreenWindow, false)
         {
             this.Visible = visible;
             this.Controls.Add(this.worldWidth);
@@ -33,7 +31,7 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
 
         public override string GetTextureName()
         {
-            return "MenuBackground";
+            return TextureLoader.GUIMenuBackground;
         }
     }
 }

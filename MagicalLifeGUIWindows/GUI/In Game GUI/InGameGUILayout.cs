@@ -1,6 +1,6 @@
-﻿using MagicalLifeSettings.Storage;
+﻿using MagicalLifeAPI.Filing;
 
-namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
+namespace MagicalLifeGUIWindows.GUI.In
 {
     /// <summary>
     /// Returns the correct hardcoded values for the current screen resolution for the new world menu.
@@ -8,88 +8,16 @@ namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
     public static class InGameGUILayout
     {
         /// <summary>
-        /// The x position of the turn button.
-        /// </summary>
-        public static int TurnButtonX
-        {
-            get
-            {
-                switch ((Resolution)MainWindow.Default.Resolution)
-                {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.TurnButtonX;
-
-                    default:
-                        return InGameGUILayout1920x1080.TurnButtonX;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The y position of the turn button.
-        /// </summary>
-        public static int TurnButtonY
-        {
-            get
-            {
-                switch ((Resolution)MainWindow.Default.Resolution)
-                {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.TurnButtonY;
-
-                    default:
-                        return InGameGUILayout1920x1080.TurnButtonY;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The width of the turn button.
-        /// </summary>
-        public static int TurnButtonWidth
-        {
-            get
-            {
-                switch ((Resolution)MainWindow.Default.Resolution)
-                {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.TurnButtonWidth;
-
-                    default:
-                        return InGameGUILayout1920x1080.TurnButtonWidth;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The height of the turn button.
-        /// </summary>
-        public static int TurnButtonHeight
-        {
-            get
-            {
-                switch ((Resolution)MainWindow.Default.Resolution)
-                {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.TurnButtonHeight;
-
-                    default:
-                        return InGameGUILayout1920x1080.TurnButtonHeight;
-                }
-            }
-        }
-
-        /// <summary>
         /// The x position at which the in game GUI container is drawn.
         /// </summary>
         public static int ContainerX
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.ContainerX;
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ContainerX;
 
                     default:
                         return InGameGUILayout1920x1080.ContainerX;
@@ -104,10 +32,10 @@ namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.ContainerY;
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ContainerY;
 
                     default:
                         return InGameGUILayout1920x1080.ContainerY;
@@ -122,10 +50,10 @@ namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.ContainerWidth;
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ContainerWidth;
 
                     default:
                         return InGameGUILayout1920x1080.ContainerWidth;
@@ -140,13 +68,103 @@ namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return InGameGUILayout1920x1080.ContainerHeight;
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ContainerHeight;
 
                     default:
                         return InGameGUILayout1920x1080.ContainerHeight;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Y position at which to render the top of every action button.
+        /// </summary>
+        public static int ActionButtonY
+        {
+            get
+            {
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
+                {
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ActionButtonY;
+
+                    default:
+                        return InGameGUILayout1920x1080.ActionButtonY;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The size of each action button.
+        /// </summary>
+        public static int ActionButtonSize
+        {
+            get
+            {
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
+                {
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ActionButtonSize;
+
+                    default:
+                        return InGameGUILayout1920x1080.ActionButtonSize;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The x position at which to render the mining action button.
+        /// </summary>
+        public static int MineActionButtonX
+        {
+            get
+            {
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
+                {
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.MineActionButtonX;
+
+                    default:
+                        return InGameGUILayout1920x1080.MineActionButtonX;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The x position at which to render the mining action button.
+        /// </summary>
+        public static int HoeActionButtonX
+        {
+            get
+            {
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
+                {
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.HoeActionButtonX;
+
+                    default:
+                        return InGameGUILayout1920x1080.HoeActionButtonX;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The x position at which to render the chop action button.
+        /// </summary>
+        public static int ChopActionButtonX
+        {
+            get
+            {
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
+                {
+                    case Resolution._2560x1440:
+                        return InGameGUILayout2560x1440.ChopActionButtonX;
+
+                    default:
+                        return InGameGUILayout1920x1080.ChopActionButtonX;
                 }
             }
         }

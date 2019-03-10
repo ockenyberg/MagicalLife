@@ -1,23 +1,17 @@
-﻿using MagicalLifeGUIWindows.Input;
+﻿using MagicalLifeAPI.Load;
+using MagicalLifeGUIWindows.Input;
 
-namespace MagicalLifeAPI.Universal
+namespace MagicalLifeGUIWindows.Load
 {
     /// <summary>
     /// Initializes some input related things.
     /// </summary>
     public class InputLoader : IGameLoader
     {
-        public int GetTotalOperations()
-        {
-            return 2;
-        }
-
-        public void InitialStartup(ref int progress)
+        public void InitialStartup()
         {
             BoundHandler.Initialize();
-            progress++;
             KeyboardHandler.Initialize();
-            progress++;
         }
     }
 }

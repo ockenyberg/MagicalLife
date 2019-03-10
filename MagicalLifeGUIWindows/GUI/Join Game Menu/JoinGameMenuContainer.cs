@@ -1,9 +1,8 @@
-﻿using MagicalLifeGUIWindows.GUI.Join_Game_Menu.Buttons;
-using MagicalLifeGUIWindows.GUI.Join_Game_Menu.Input_Boxes;
+﻿using MagicalLifeAPI.Asset;
+using MagicalLifeAPI.Components.Generic.Renderable;
 using MagicalLifeGUIWindows.GUI.Reusable;
-using MagicalLifeGUIWindows.Rendering;
 
-namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
+namespace MagicalLifeGUIWindows.GUI.Join
 {
     public class JoinGameMenuContainer : GUIContainer
     {
@@ -11,7 +10,7 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         public IPInputBox IpInputBox = new IPInputBox(false);
         public PortInputBox PortInputBox = new PortInputBox(false);
 
-        public JoinGameMenuContainer() : base("MenuBackground", RenderingPipe.FullScreenWindow)
+        public JoinGameMenuContainer() : base(TextureLoader.GUIMenuBackground, RenderInfo.FullScreenWindow, false)
         {
             this.Controls.Add(this.JoinButton);
             this.Controls.Add(this.IpInputBox);
@@ -20,7 +19,7 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
 
         public override string GetTextureName()
         {
-            return "MenuBackground";
+            return TextureLoader.GUIMenuBackground;
         }
     }
 }

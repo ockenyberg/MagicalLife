@@ -1,6 +1,6 @@
-﻿using MagicalLifeSettings.Storage;
+﻿using MagicalLifeAPI.Filing;
 
-namespace MagicalLifeGUIWindows.GUI.New_World_Menu
+namespace MagicalLifeGUIWindows.GUI.New
 {
     /// <summary>
     /// Returns the correct hard coded values for the current screen resolution for the new world menu.
@@ -14,10 +14,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.WorldSizeInputBoxY;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.WorldSizeInputBoxY;
 
                     default:
                         return NewWorldMenuLayout1920x1080.WorldSizeInputBoxY;
@@ -32,10 +32,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.WorldSizeInputBoxHeight;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.WorldSizeInputBoxHeight;
 
                     default:
                         return NewWorldMenuLayout1920x1080.WorldSizeInputBoxHeight;
@@ -50,10 +50,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.WorldSizeInputBoxWidth;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.WorldSizeInputBoxWidth;
 
                     default:
                         return NewWorldMenuLayout1920x1080.WorldSizeInputBoxWidth;
@@ -68,10 +68,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.WorldWidthInputBoxX;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.WorldWidthInputBoxX;
 
                     default:
                         return NewWorldMenuLayout1920x1080.WorldWidthInputBoxX;
@@ -86,10 +86,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.WorldLengthInputBoxX;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.WorldLengthInputBoxX;
 
                     default:
                         return NewWorldMenuLayout1920x1080.WorldLengthInputBoxX;
@@ -104,10 +104,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.NextButtonX;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.NextButtonX;
 
                     default:
                         return NewWorldMenuLayout1920x1080.NextButtonX;
@@ -122,10 +122,10 @@ namespace MagicalLifeGUIWindows.GUI.New_World_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return NewWorldMenuLayout1920x1080.LabelY;
+                    case Resolution._2560x1440:
+                        return NewWorldMenuLayout2560x1440.LabelY;
 
                     default:
                         return NewWorldMenuLayout1920x1080.LabelY;

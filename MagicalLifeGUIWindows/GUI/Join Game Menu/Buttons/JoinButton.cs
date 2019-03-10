@@ -1,16 +1,32 @@
-﻿using MagicalLifeAPI.Networking.Client;
+﻿using MagicalLifeAPI.Asset;
+using MagicalLifeAPI.Networking.Client;
+using MagicalLifeAPI.Sound;
+using MagicalLifeAPI.World.Data;
 using MagicalLifeClient;
+using MagicalLifeGUIWindows.GUI.In;
 using MagicalLifeGUIWindows.GUI.Reusable;
 using MagicalLifeGUIWindows.Input;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Input.InputListeners;
 
-namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu.Buttons
+namespace MagicalLifeGUIWindows.GUI.Join
 {
     public class JoinButton : MonoButton
     {
-        public JoinButton() : base("MenuButton", GetDisplayArea(), true, "Join Game")
+        public JoinButton() : base(TextureLoader.GUIMenuBackground, GetDisplayArea(), true, "Join Game")
         {
+            this.ClickEvent += this.JoinButton_ClickEvent;
+        }
+
+        private void JoinButton_ClickEvent(object sender, Reusable.Event.ClickEventArgs e)
+        {
+            World.Mode = MagicalLifeAPI.Networking.EngineMode.ClientOnly;
+            FMODUtil.RaiseEvent(SoundsTable.UIClick);
+            ClientSendRecieve.Initialize(new MagicalLifeAPI.Networking.NetworkSettings(JoinGameMenu.Menu.IpInputBox.Text, int.Parse(JoinGameMenu.Menu.PortInputBox.Text)));
+            Client.Load();
+            MenuHandler.Clear();
+            InGameGUI.Initialize();
+            BoundHandler.Popup(InGameGUI.InGame);
         }
 
         private static Rectangle GetDisplayArea()
@@ -20,19 +36,6 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu.Buttons
             int width = JoinGameMenuLayout.IPInputBoxWidth;
             int height = JoinGameMenuLayout.IPInputBoxHeight;
             return new Rectangle(x, y, width, height);
-        }
-
-        public override void Click(MouseEventArgs e)
-        {
-            ClientSendRecieve.Initialize(new MagicalLifeAPI.Networking.NetworkSettings(JoinGameMenu.menu.IpInputBox.Text, int.Parse(JoinGameMenu.menu.PortInputBox.Text)));
-            Client.Load();
-            MenuHandler.Clear();
-            In_Game_GUI.InGameGUI.Initialize();
-            BoundHandler.Popup(In_Game_GUI.InGameGUI.InGame);
-        }
-
-        public override void DoubleClick(MouseEventArgs e)
-        {
         }
     }
 }

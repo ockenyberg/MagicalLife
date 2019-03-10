@@ -2,17 +2,119 @@ SneakyTactician  <SneakyTactician@outlook.com>
 
 ---
 
-## [Version 0.*.*]
+## [Version 0.1.2]
+
+#### API
+*Now supports the tilling of dirt
+*Skills are now in
+*Harvest skill now has impact on the speed of harvesting resources
+*Removed Serilog dependency
+*Inventories are now baked in for creatures
+*Increased camera performance, 100x100 worlds are possible (~22 fps)
+
+#### GUI
+*Tilling dirt is now available from the in game GUI
+*2K support (2560x1440)
+*Certain windows are now movable
+*Creatures can now be clicked upon to see their skills/creature window
+*Added the new log texture
+*Skills/creature window now has an inventory tab
+*Zooming out now supported
+
+#### Bugs
+
+---
+
+## [Version 0.1.1]
+
+#### API
+*Audio now has multiple channels/can play multiple sounds simultaneously
+*Audio now has a surround sound effect
+	*Audio listening is set from the center of the screen
+*API now works anywhere C# can run
+*Dedicated server now runs on Mac and Linux in addition to windows
+*Trees now in as a resource
+*Trees are now harvestable
+*Oak Trees are now in
+*Maple Trees are now in
+*Pine trees are now in
+*Now handles the dropping of an item on a tile that already has an item of a different type on it.
+
+#### GUI
+*Trees now render
+*Axe button now allows for the user to mark which trees to chop down
+
+#### Bugs
+*Items now render properly again
+*Reduced the occurrences of a saving bug
+
+---
+
+## [Version 0.1.0] 
+
+#### API
+* Saving a game is now supported
+* Loading a game is now supported
+* Errors are now logged
+* Job system is now client side
+* Job system now has enhanced support for dependencies
+* Job system now has enhanced support for "bound" (same worker) jobs
+* Graphics API reworked to support animations, as well as any future different types of rendering
+
+#### Server
+* The newgame command now requires a 3rd parameter, the world's name
+
+#### GUI
+* The host game button has been replaced by the load game button
+* Added listbox support
+* Added the load game listbox
+* Load game menu now works
+* Added a back button to the in game escape menu
+* Input boxes no longer error when reopening menus and backspacing
+* The placeholder texture for the mine action button has been replaced
+* Stone rubble texture has been replaced
+* Pickaxe icon in map when tile is queue up to be mined has changed
+* Added the ability to zoom in
+* Characters now have new texture
+* Characters now have animations
+
+#### Bugs
+
+* Fixed a mining command bug
+* Fixed a memory Leak
+
+---
+
+## [Version 0.0.9]
 
 #### API
 * Added internal support for having items in tiles
 * Added item addition, removal, and search functionality
+* Added a grass tile
+* Added the stone chunk item
+* Mining jobs are now possible
+* Added internal support for sfx/sound events
 
 #### Server
+* Separated server loading and server starting into two separate commands
+* Now handles player connections and disconnections in a safer way
 
 #### GUI
+* Grass textures now connect to form smoother patterns
+* Now showing logos for MonoGame and FMOD
+* Player can now mark stone to be mined
+
+#### Sound
+* Buttons now play a clicking sound when clicked upon
+* Stone now plays a pickaxe hitting noise while it is being mined
 
 #### Bugs
+* Fixed issue [#17](https://github.com/SneakyTactician/MagicalLife/issues/17)
+* Fixed issue [#57](https://github.com/SneakyTactician/MagicalLife/issues/57)
+* Fixed an issue sometimes causing the character to be unselectable
+* Discovered and fixed issue [#50](https://github.com/SneakyTactician/MagicalLife/issues/50)
+
+* Discovered issue [#51](https://github.com/SneakyTactician/MagicalLife/issues/51)
 
 ---
 

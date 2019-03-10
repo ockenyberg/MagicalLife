@@ -1,9 +1,13 @@
-﻿using MagicalLifeAPI.DataTypes;
-using MagicalLifeAPI.Entities;
+﻿using MagicalLifeAPI.Components.Generic.Renderable;
+using MagicalLifeAPI.DataTypes;
+using MagicalLifeAPI.Entity;
+using MagicalLifeAPI.Entity.AI.Task;
+using MagicalLifeAPI.Error.InternalExceptions;
 using MagicalLifeAPI.GUI;
 using MagicalLifeAPI.World.Data;
-using MagicalLifeGUIWindows.Rendering;
+using MagicalLifeGUIWindows.GUI.In;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MagicalLifeGUIWindows.Input.History
 {
@@ -21,7 +25,7 @@ namespace MagicalLifeGUIWindows.Input.History
                     return this.SingleSelect(e);
 
                 case MonoGame.Extended.Input.InputListeners.MouseButton.Right:
-                    return this.Order(e);
+                    return this.Order(e, InGameGUI.Selected);
 
                 default:
                     return null;
@@ -30,20 +34,93 @@ namespace MagicalLifeGUIWindows.Input.History
 
         private HistoricalInput SingleSelect(InputEventArgs e)
         {
-            Point2D mapSpot = Util.GetMapLocation(e.MouseEventArgs.Position.X, e.MouseEventArgs.Position.Y, RenderingPipe.Dimension, out bool success);
+            switch (InGameGUI.Selected)
+            {
+                case ActionSelected.None:
+                    return this.NoAction(e);
+
+                case ActionSelected.Mine:
+                    return this.GenericAction(e, ActionSelected.Mine);
+
+                case ActionSelected.Till:
+                    return this.TillAction(e);
+
+                case ActionSelected.Chop:
+                    return this.GenericAction(e, ActionSelected.Chop);
+
+                default:
+                    throw new UnexpectedEnumMemberException();
+            }
+        }
+
+        /// <summary>
+        /// Generates a <see cref="HistoricalInput"/> for when there is a mining action selected by the player.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private HistoricalInput TillAction(InputEventArgs e)
+        {
+            return this.GenericAction(e, ActionSelected.Till);
+        }
+
+        /// <summary>
+        /// Generates a <see cref="HistoricalInput"/> for when there is a generic action selected by the player.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private HistoricalInput GenericAction(InputEventArgs e, ActionSelected action)
+        {
+            Point2D mapSpot = Util.GetMapLocation(e.MouseEventArgs.Position.X, e.MouseEventArgs.Position.Y, RenderInfo.Dimension, out bool success);
 
             if (success)
             {
                 Selectable select = null;
 
-                foreach (Living item in World.Dimensions[RenderingPipe.Dimension].GetChunkForLocation(mapSpot.X, mapSpot.Y).Creatures)
+                select = World.GetTile(RenderInfo.Dimension, mapSpot.X, mapSpot.Y);
+
+                if (select != null)
                 {
-                    if (item.MapLocation == mapSpot)
+                    List<Selectable> selected = new List<Selectable>
                     {
-                        select = item;
-                        break;
+                        select
+                    };
+
+                    if (e.ShiftDown)
+                    {
+                        if (this.IsSelectableSelected(select))
+                        {
+                            return new HistoricalInput(false, selected, action);
+                        }
+                        else
+                        {
+                            return new HistoricalInput(selected, action);
+                        }
+                    }
+                    else
+                    {
+                        return new HistoricalInput(selected, true, action);
                     }
                 }
+            }
+
+            return new HistoricalInput(true, InputHistory.Selected, action);
+        }
+
+        /// <summary>
+        /// Generates a <see cref="HistoricalInput"/> for when there is no action selected by the player.
+        /// </summary>
+        /// <returns></returns>
+        private HistoricalInput NoAction(InputEventArgs e)
+        {
+            Point2D mapSpot = Util.GetMapLocation(e.MouseEventArgs.Position.X, e.MouseEventArgs.Position.Y, RenderInfo.Dimension, out bool success);
+
+            if (success)
+            {
+                Selectable select = null;
+
+                Chunk chunk = World.Dimensions[RenderInfo.Dimension].GetChunkForLocation(mapSpot.X, mapSpot.Y);
+                KeyValuePair<System.Guid, Living> result = chunk.Creatures.FirstOrDefault(x => mapSpot.Equals(x.Value.MapLocation));
+                select = result.Value;
 
                 if (select != null)
                 {
@@ -57,21 +134,21 @@ namespace MagicalLifeGUIWindows.Input.History
                     {
                         if (this.IsSelectableSelected(select))
                         {
-                            return new HistoricalInput(false, selected);
+                            return new HistoricalInput(false, selected, ActionSelected.None);
                         }
                         else
                         {
-                            return new HistoricalInput(selected);
+                            return new HistoricalInput(selected, ActionSelected.None);
                         }
                     }
                     else
                     {
-                        return new HistoricalInput(selected, true);
+                        return new HistoricalInput(selected, true, ActionSelected.None);
                     }
                 }
             }
 
-            return new HistoricalInput(true, InputHistory.Selected);
+            return new HistoricalInput(true, InputHistory.Selected, ActionSelected.None);
         }
 
         /// <summary>
@@ -92,15 +169,15 @@ namespace MagicalLifeGUIWindows.Input.History
             return false;
         }
 
-        private HistoricalInput Order(InputEventArgs e)
+        private HistoricalInput Order(InputEventArgs e, ActionSelected action)
         {
             Point2D screenLocation = e.MouseEventArgs.Position;
 
-            Point2D mapLocation = Util.GetMapLocation(screenLocation.X, screenLocation.Y, RenderingPipe.Dimension, out bool success);
+            Point2D mapLocation = Util.GetMapLocation(screenLocation.X, screenLocation.Y, RenderInfo.Dimension, out bool success);
 
             if (success)
             {
-                return new HistoricalInput(mapLocation);
+                return new HistoricalInput(mapLocation, action);
             }
             else
             {

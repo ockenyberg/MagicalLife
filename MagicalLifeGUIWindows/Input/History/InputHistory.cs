@@ -30,7 +30,7 @@ namespace MagicalLifeGUIWindows.Input.History
 
         public static event Action InputAdded;
 
-        private static HistoricalInputFactory Factory = new HistoricalInputFactory();
+        private static readonly HistoricalInputFactory Factory = new HistoricalInputFactory();
 
         public static List<Selectable> Selected = new List<Selectable>();
 
@@ -45,17 +45,23 @@ namespace MagicalLifeGUIWindows.Input.History
 
         public static void Initialize()
         {
-            BoundHandler.MouseListner.MouseDoubleClicked += MouseListner_MouseDoubleClicked;
-            BoundHandler.MouseListner.MouseDragStart += MouseListner_MouseDragStart;
-            BoundHandler.MouseListner.MouseDragEnd += MouseListner_MouseDragEnd;
-            BoundHandler.MouseListner.MouseWheelMoved += MouseListner_MouseWheelMoved;
-            KeyboardHandler.keyboardListener.KeyPressed += KeyboardListener_KeyPressed;
-            KeyboardHandler.keyboardListener.KeyReleased += KeyboardListener_KeyReleased;
+            BoundHandler.MouseListener.MouseDoubleClicked += MouseListner_MouseDoubleClicked;
+            BoundHandler.MouseListener.MouseDragStart += MouseListner_MouseDragStart;
+            BoundHandler.MouseListener.MouseDragEnd += MouseListner_MouseDragEnd;
+            BoundHandler.MouseListener.MouseWheelMoved += MouseListner_MouseWheelMoved;
+            KeyboardHandler.KeysPressed += KeyboardHandler_KeysPressed;
+            KeyboardHandler.KeysReleased += KeyboardHandler_KeysReleased;
+            BoundHandler.MouseListener.MouseDrag += MouseListner_MouseDrag;
         }
 
-        private static void KeyboardListener_KeyReleased(object sender, KeyboardEventArgs e)
+        private static void MouseListner_MouseDrag(object sender, MouseEventArgs e)
         {
-            switch (e.Key)
+            //Haven't done anything here yet
+        }
+
+        private static void KeyboardHandler_KeysReleased(object sender, Microsoft.Xna.Framework.Input.Keys e)
+        {
+            switch (e)
             {
                 case Microsoft.Xna.Framework.Input.Keys.LeftShift:
                 case Microsoft.Xna.Framework.Input.Keys.RightShift:
@@ -72,9 +78,9 @@ namespace MagicalLifeGUIWindows.Input.History
             }
         }
 
-        private static void KeyboardListener_KeyPressed(object sender, KeyboardEventArgs e)
+        private static void KeyboardHandler_KeysPressed(object sender, Microsoft.Xna.Framework.Input.Keys e)
         {
-            switch (e.Key)
+            switch (e)
             {
                 case Microsoft.Xna.Framework.Input.Keys.LeftShift:
                 case Microsoft.Xna.Framework.Input.Keys.RightShift:
@@ -93,22 +99,22 @@ namespace MagicalLifeGUIWindows.Input.History
 
         private static void MouseListner_MouseWheelMoved(object sender, MouseEventArgs e)
         {
-            //History.Enqueue(Factory.Generate(new InputEventArgs(ShiftDown, CtrlDown, e)));
+            //We don't need this yet
         }
 
         private static void MouseListner_MouseDragEnd(object sender, MouseEventArgs e)
         {
-            //History.Enqueue(Factory.Generate(new InputEventArgs(ShiftDown, CtrlDown, e)));
+            //We don't need this yet
         }
 
         private static void MouseListner_MouseDragStart(object sender, MouseEventArgs e)
         {
-            //History.Enqueue(Factory.Generate(new InputEventArgs(ShiftDown, CtrlDown, e)));
+            //We don't need this yet
         }
 
         private static void MouseListner_MouseDoubleClicked(object sender, MouseEventArgs e)
         {
-            //History.Enqueue(Factory.Generate(new InputEventArgs(ShiftDown, CtrlDown, e)));
+            //We don't need this yet
         }
 
         /// <summary>

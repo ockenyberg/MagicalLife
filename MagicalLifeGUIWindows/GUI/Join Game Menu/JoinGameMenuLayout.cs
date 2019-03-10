@@ -1,6 +1,6 @@
-﻿using MagicalLifeSettings.Storage;
+﻿using MagicalLifeAPI.Filing;
 
-namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
+namespace MagicalLifeGUIWindows.GUI.Join
 {
     public static class JoinGameMenuLayout
     {
@@ -11,10 +11,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.IPInputBoxHeight;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.IPInputBoxHeight;
 
                     default:
                         return JoinGameMenuLayout1920x1080.IPInputBoxHeight;
@@ -29,10 +29,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.IPInputBoxWidth;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.IPInputBoxWidth;
 
                     default:
                         return JoinGameMenuLayout1920x1080.IPInputBoxWidth;
@@ -47,10 +47,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.IPInputBoxX;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.IPInputBoxX;
 
                     default:
                         return JoinGameMenuLayout1920x1080.IPInputBoxX;
@@ -65,10 +65,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.IPInputBoxY;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.IPInputBoxY;
 
                     default:
                         return JoinGameMenuLayout1920x1080.IPInputBoxY;
@@ -83,10 +83,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.PortInputBoxX;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.PortInputBoxX;
 
                     default:
                         return JoinGameMenuLayout1920x1080.PortInputBoxX;
@@ -101,10 +101,10 @@ namespace MagicalLifeGUIWindows.GUI.Join_Game_Menu
         {
             get
             {
-                switch ((Resolution)MainWindow.Default.Resolution)
+                switch ((Resolution)SettingsManager.WindowSettings.Settings.Resolution)
                 {
-                    case Resolution._1920x1080:
-                        return JoinGameMenuLayout1920x1080.JoinButtonX;
+                    case Resolution._2560x1440:
+                        return JoinGameMenuLayout2560x1440.JoinButtonX;
 
                     default:
                         return JoinGameMenuLayout1920x1080.JoinButtonX;

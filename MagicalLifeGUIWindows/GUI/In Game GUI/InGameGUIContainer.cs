@@ -1,20 +1,26 @@
-﻿using MagicalLifeGUIWindows.GUI.In_Game_GUI.Buttons;
+﻿using MagicalLifeAPI.Asset;
 using MagicalLifeGUIWindows.GUI.Reusable;
 using Microsoft.Xna.Framework;
 
-namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
+namespace MagicalLifeGUIWindows.GUI.In
 {
     /// <summary>
     /// The in game GUI container.
     /// </summary>
     public class InGameGUIContainer : GUIContainer
     {
-        public TurnButton turnButton = new TurnButton();
+        public MineActionButton MineActionButton { get; set; } = new MineActionButton();
 
-        public InGameGUIContainer(bool visible) : base("MenuBackground", GetDrawingBounds())
+        public TillDirtActionButton TillDirtActionButton { get; set; } = new TillDirtActionButton();
+
+        public ChopActionButton ChopActionButton { get; set; } = new ChopActionButton();
+
+        public InGameGUIContainer(bool visible) : base(TextureLoader.GUIMenuBackground, GetDrawingBounds(), false)
         {
             this.Visible = visible;
-            this.Controls.Add(this.turnButton);
+            this.Controls.Add(this.MineActionButton);
+            this.Controls.Add(this.TillDirtActionButton);
+            this.Controls.Add(this.ChopActionButton);
         }
 
         /// <summary>
@@ -33,7 +39,7 @@ namespace MagicalLifeGUIWindows.GUI.In_Game_GUI
 
         public override string GetTextureName()
         {
-            return "MenuBackground";
+            return TextureLoader.GUIMenuBackground;
         }
     }
 }

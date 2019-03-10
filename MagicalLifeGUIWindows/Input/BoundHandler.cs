@@ -1,9 +1,13 @@
-﻿using MagicalLifeAPI.Filing.Logging;
+﻿using MagicalLifeAPI.Components.Generic.Renderable;
+using MagicalLifeAPI.Filing.Logging;
+using MagicalLifeAPI.World.Data;
+using MagicalLifeGUIWindows.GUI;
 using MagicalLifeGUIWindows.GUI.Reusable;
 using MagicalLifeGUIWindows.Input.Comparators;
 using MagicalLifeGUIWindows.Input.History;
 using MagicalLifeGUIWindows.Map;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input.InputListeners;
 using System.Collections.Generic;
 
@@ -24,7 +28,7 @@ namespace MagicalLifeGUIWindows.Input
         /// </summary>
         public static List<GUIContainer> GUIWindows { get; private set; } = new List<GUIContainer>();
 
-        public static MouseListener MouseListner = new MouseListener();
+        public static MouseListener MouseListener { get; set; }
 
         private static readonly BoundsSorter BoundSorter = new BoundsSorter();
 
@@ -33,39 +37,34 @@ namespace MagicalLifeGUIWindows.Input
         private static readonly ClickBoundsSorter ClickBoundsSorter = new ClickBoundsSorter();
 
         /// <summary>
-        /// Anything in game that can be clicked on, that is not considered a menu or popup.
-        /// Ex: a human, a sword.
-        /// </summary>
-        //public static List<ClickBounds> GameObjectBounds = new List<ClickBounds>();
-
-        /// <summary>
         /// Constructs the <see cref="BoundHandler"/> class.
         /// </summary>
         public static void Initialize()
         {
-            MouseListner.MouseClicked += MouseListener_MouseClicked;
-            MouseListner.MouseDoubleClicked += MouseListener_MouseDoubleClicked;
-            MouseListner.MouseWheelMoved += MouseListener_MouseWheelMoved;
-            MouseListner.MouseDrag += MouseListner_MouseDrag;
+            MouseListener = new MouseListener();
+            MouseListener.MouseClicked += MouseListener_MouseClicked;
+            MouseListener.MouseDoubleClicked += MouseListener_MouseDoubleClicked;
+            MouseListener.MouseWheelMoved += MouseListener_MouseWheelMoved;
+            MouseListener.MouseDrag += MouseListner_MouseDrag;
         }
 
         private static void MouseListner_MouseDrag(object sender, MouseEventArgs e)
         {
+            //Don't need this yet
         }
 
         private static void MouseListener_MouseWheelMoved(object sender, MouseEventArgs e)
         {
+            //Don't need this yet
         }
 
         private static void MouseListener_MouseDoubleClicked(object sender, MouseEventArgs e)
         {
-            //MasterLog.DebugWriteLine("Double click detected: " + e.Position.ToString());
             ContainerDoubleClick(e);
         }
 
         private static void MouseListener_MouseClicked(object sender, MouseEventArgs e)
         {
-            //MasterLog.DebugWriteLine("Single click detected: " + e.Position.ToString());
             ContainerClick(e);
         }
 
@@ -76,7 +75,7 @@ namespace MagicalLifeGUIWindows.Input
         /// <param name="time"></param>
         public static void UpdateMouseInput(GameTime time)
         {
-            MouseListner.Update(time);
+            MouseListener.Update(time);
         }
 
         /// <summary>
@@ -88,53 +87,18 @@ namespace MagicalLifeGUIWindows.Input
         {
             foreach (GUIContainer item in GUIWindows)
             {
-                if (item.Visible && item.DrawingBounds.Contains(clickData.Position))
+                GUIContainer youngest = GetYoungestChild(item);
+                if (youngest.Visible && youngest.DrawingBounds.Contains(clickData.Position))
                 {
-                    Click(clickData, item.Controls, item);
-                    MasterLog.DebugWriteLine("Clicking in menu: " + item.GetType().FullName);
+                    Click(clickData, youngest.Controls, youngest);
+                    MasterLog.DebugWriteLine("Clicking in menu: " + youngest.GetType().FullName);
                     return;
                 }
             }
 
-            if (!Click(clickData, Bounds))
-            {
-                InputHistory.MapMouseClick(clickData);
-            }
-        }
-
-        /// <summary>
-        /// Handles who gets the single click event from the options provided.
-        /// </summary>
-        /// <param name="clickData"></param>
-        private static bool Click(MouseEventArgs clickData, List<GUIElement> Options)
-        {
-            int focus = -1;
-            int length = Options.Count;
-            GUIElement item = null;
-
-            for (int i = 0; i < length; i++)
-            {
-                item = Options[i];
-                if (focus == -1 && item.MouseBounds.Bounds.Contains(clickData.Position.X, clickData.Position.Y))
-                {
-                    item.HasFocus = true;
-                    focus = i;
-                }
-                else
-                {
-                    item.HasFocus = false;
-                }
-            }
-
-            if (focus != -1)
-            {
-                Options[focus].Click(clickData);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            //If the click isn't in a GUI, then it must be in the map...
+            MouseEventArgs transformed = TransformViaCamera(clickData);
+            InputHistory.MapMouseClick(transformed);
         }
 
         /// <summary>
@@ -147,25 +111,31 @@ namespace MagicalLifeGUIWindows.Input
             int focus = -1;
             int length = Options.Count;
             GUIElement item = null;
+            MasterLog.DebugWriteLine("Click position: " + clickData.Position.ToString());
 
             for (int i = 0; i < length; i++)
             {
                 item = Options[i];
-                if (focus == -1 && item.MouseBounds.Bounds.Contains(clickData.Position.X + container.DrawingBounds.X, clickData.Position.Y - container.DrawingBounds.Y))
+
+                MasterLog.DebugWriteLine(item.GetType().ToString() + " gui bounds: " + item.MouseBounds.Bounds.ToString());
+
+                if (focus == -1 && item.MouseBounds.Bounds.Contains(clickData.Position.X - container.DrawingBounds.X, clickData.Position.Y - container.DrawingBounds.Y))
                 {
                     item.HasFocus = true;
                     focus = i;
+                    MasterLog.DebugWriteLine(item.GetType().ToString() + " with a bounds of " + item.MouseBounds.Bounds.ToString() + "was clicked on");
                 }
                 else
                 {
                     item.HasFocus = false;
+                    MasterLog.DebugWriteLine(item.GetType().ToString() + " with a bounds of " + item.MouseBounds.Bounds.ToString() + "was not clicked on");
                 }
             }
 
             if (focus != -1)
             {
                 MasterLog.DebugWriteLine("Clicking on item: " + Options[focus].GetType().FullName);
-                Options[focus].Click(clickData);
+                Options[focus].Click(clickData, container);
             }
         }
 
@@ -173,44 +143,72 @@ namespace MagicalLifeGUIWindows.Input
         {
             foreach (GUIContainer item in GUIWindows)
             {
-                if (item.Visible && item.DrawingBounds.Contains(clickData.Position))
+                GUIContainer youngest = GetYoungestChild(item);
+                if (youngest.Visible && youngest.DrawingBounds.Contains(clickData.Position))
                 {
-                    DoubleClick(clickData, item.Controls);
+                    DoubleClick(clickData, youngest.Controls, youngest);
                     return;
                 }
             }
 
-            DoubleClick(clickData, Bounds);
+            MouseEventArgs transformed = TransformViaCamera(clickData);
+            //TODO: Make a special map double click handler
+            InputHistory.MapMouseClick(transformed);
         }
 
         /// <summary>
         /// Handles who gets the double click event.
         /// </summary>
         /// <param name="clickData"></param>
-        private static void DoubleClick(MouseEventArgs clickData, List<GUIElement> Options)
+        private static void DoubleClick(MouseEventArgs clickData, List<GUIElement> Options, GUIContainer container)
         {
             int focus = -1;
-            //Focus is wrong somehow.
             int length = Options.Count;
             GUIElement item = null;
+
+            MasterLog.DebugWriteLine("Double click position: " + clickData.Position.ToString());
 
             for (int i = 0; i < length; i++)
             {
                 item = Options[i];
+
+                MasterLog.DebugWriteLine(item.GetType().ToString() + " gui bounds: " + item.MouseBounds.Bounds.ToString());
+
                 if (focus == -1 && item.MouseBounds.Bounds.Contains(clickData.Position.X, clickData.Position.Y))
                 {
                     item.HasFocus = true;
                     focus = i;
+                    MasterLog.DebugWriteLine(item.GetType().ToString() + " with a bounds of " + item.MouseBounds.Bounds.ToString() + "was double clicked on");
                 }
                 else
                 {
                     item.HasFocus = false;
+                    MasterLog.DebugWriteLine(item.GetType().ToString() + " with a bounds of " + item.MouseBounds.Bounds.ToString() + "was not double clicked on");
                 }
             }
 
             if (focus != -1)
             {
-                Options[focus].DoubleClick(clickData);
+                Options[focus].DoubleClick(clickData, container);
+            }
+        }
+
+        private static GUIContainer GetYoungestChild(GUIContainer container)
+        {
+            if (container.Child != null)
+            {
+                if (container.Child.Child != null)
+                {
+                    return GetYoungestChild(container.Child);
+                }
+                else
+                {
+                    return container.Child;
+                }
+            }
+            else
+            {
+                return container;
             }
         }
 
@@ -236,6 +234,11 @@ namespace MagicalLifeGUIWindows.Input
         public static void RemoveContainer(GUIContainer container)
         {
             GUIWindows.Remove(container);
+
+            if (container.Visible)
+            {
+                ShowLast();
+            }
         }
 
         /// <summary>
@@ -253,6 +256,11 @@ namespace MagicalLifeGUIWindows.Input
             Bounds.Insert(index, bounds);
         }
 
+        private static void ShowLast()
+        {
+            GUIWindows[GUIWindows.Count - 1].Visible = true;
+        }
+
         /// <summary>
         /// Sets that container as the visible container, and gives it priority.
         /// </summary>
@@ -261,7 +269,7 @@ namespace MagicalLifeGUIWindows.Input
         {
             if (GUIWindows.Contains(container))
             {
-                HideAll();
+                MenuHandler.Clear();
                 container.Visible = true;
                 container.Priority = RenderingData.GetGUIContainerPriority();
 
@@ -270,7 +278,7 @@ namespace MagicalLifeGUIWindows.Input
             }
             else
             {
-                HideAll();
+                MenuHandler.Clear();
                 container.Visible = true;
                 container.Priority = RenderingData.GetGUIContainerPriority();
 
@@ -283,6 +291,32 @@ namespace MagicalLifeGUIWindows.Input
             foreach (GUIContainer item in GUIWindows)
             {
                 item.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Transforms the old <see cref="MouseEventArgs"/> into a new one that takes into account the camera system.
+        /// </summary>
+        /// <param name="old"></param>
+        /// <returns></returns>
+        public static MouseEventArgs TransformViaCamera(MouseEventArgs old)
+        {
+            if (World.Dimensions.Count > 0)
+            {
+                //The new position adjusted for the camera
+                Point position = RenderInfo.Camera2D.ScreenToWorld(old.Position.ToVector2()).ToPoint();
+                //The previous state adjusted for the camera
+                MouseState previousState = new MouseState(position.X, position.Y, old.ScrollWheelValue, old.PreviousState.LeftButton,
+                    old.PreviousState.MiddleButton, old.PreviousState.RightButton, old.PreviousState.XButton1, old.PreviousState.XButton2);
+
+                MouseState currentState = new MouseState(position.X, position.Y, old.ScrollWheelValue, old.CurrentState.LeftButton,
+                    old.CurrentState.MiddleButton, old.CurrentState.RightButton, old.CurrentState.XButton1, old.CurrentState.XButton2);
+
+                return new MouseEventArgs(MouseListener.ViewportAdapter, old.Time, previousState, currentState, old.Button);
+            }
+            else
+            {
+                return old;
             }
         }
     }
